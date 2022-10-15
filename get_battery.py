@@ -101,6 +101,7 @@ def excel_date():
             worksheet[battery_level_row] = line[2]
             i += 1
         workbook.save("battery.xls")
+        print("已将电量信息汇总并去重到battery.xls表格中啦")
 
 
 def exists_delete(path: str):
@@ -109,8 +110,8 @@ def exists_delete(path: str):
 
 
 if __name__ == '__main__':
-    # kernels = get_path()
-    # get_battery_log(kernels)
-    # format_time_log()
-    # kernel_battery_data_extract("temp/convert_kernel_log.txt")
+    kernels = get_path()
+    get_battery_log(kernels)
+    format_time_log()
+    kernel_battery_data_extract("temp/convert_kernel_log.txt")
     excel_date()
