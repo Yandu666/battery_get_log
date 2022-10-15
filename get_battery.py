@@ -102,6 +102,7 @@ def excel_date():
             i += 1
         workbook.save("battery.xls")
         print("已将电量信息汇总并去重到battery.xls表格中啦")
+        os.system("battery.xls")
 
 
 def exists_delete(path: str):
