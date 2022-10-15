@@ -1,5 +1,7 @@
+import datetime
 import os
-import xlwings as xw
+
+from openpyxl import Workbook
 
 
 def get_path():
@@ -28,8 +30,7 @@ def get_battery_log(data_list: list):
     将kernel log 复制到log/log文件中
     """
     log_path = "temp/log"
-    if os.path.exists(log_path):
-        os.remove(log_path)
+    exists_delete(log_path)
     num = len(data_list)
     for i in range(num):
         file = open(data_list[i], "r+", encoding="utf-8")
@@ -44,10 +45,8 @@ def get_battery_log(data_list: list):
 def format_time_log():
     convert_log_path = "temp/log.localtime"
     convert_battery_log_path = "temp/convert_kernel_log.txt"
-    if os.path.exists(convert_log_path):
-        os.remove(convert_log_path)
-    if os.path.exists(convert_battery_log_path):
-        os.remove(convert_battery_log_path)
+    exists_delete(convert_log_path)
+    exists_delete(convert_battery_log_path)
     os.system("call run_convert.bat")
     file = open(convert_log_path, "r+", encoding="utf-8")
     convert_battery_log = open(convert_battery_log_path, "a+", encoding="utf-8")
@@ -84,7 +83,29 @@ def kernel_battery_data_extract(convert_kernel_log_path: str):
 
 
 def excel_date():
-    pass
+    exists_delete("battery.xls")
+    file_path = "temp/date_kernel.txt"
+    if os.path.exists(file_path):
+        file = open(file_path, "r+", encoding="utf-8")
+
+        workbook = Workbook()
+        worksheet = workbook.active
+        i = 0
+        for line in file:
+            line = line.split(" ")
+            day_row = f"A{i + 1}"
+            hour_minute_row = f"B{i + 1}"
+            battery_level_row = f"C{i + 1}"
+            worksheet[day_row] = line[0]
+            worksheet[hour_minute_row] = line[1]
+            worksheet[battery_level_row] = line[2]
+            i += 1
+        workbook.save("battery.xls")
+
+
+def exists_delete(path: str):
+    if os.path.exists(path):
+        os.remove(path)
 
 
 if __name__ == '__main__':
