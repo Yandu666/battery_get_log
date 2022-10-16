@@ -1,13 +1,23 @@
-import datetime
 import os
+import shutil
 
 from openpyxl import Workbook
+
+
+def get_log():
+    log_path = "data/debuglogger"
+    if os.path.exists(log_path):
+        shutil.rmtree(log_path)
+    os.system("adb devices")
+    os.system(f"adb pull /sdcard/debuglogger {log_path}/")
+
 
 
 def get_path():
     """
     获取data目录下的kernel log 的路径
     """
+    get_log()
     log_root = r"data/debuglogger/mobilelog"
     lists = []
     temp = os.listdir(log_root)
@@ -111,8 +121,9 @@ def exists_delete(path: str):
 
 
 if __name__ == '__main__':
-    kernels = get_path()
-    get_battery_log(kernels)
-    format_time_log()
-    kernel_battery_data_extract("temp/convert_kernel_log.txt")
-    excel_date()
+    # kernels = get_path()
+    # get_battery_log(kernels)
+    # format_time_log()
+    # kernel_battery_data_extract("temp/convert_kernel_log.txt")
+    # excel_date()
+    get_log()
